@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday Belkis ❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    /* ============================================================
+       CSS VARIABLES & RESET
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink-deep:    #e05c8a;
+      --pink-mid:     #f4a0bf;
+      --pink-light:   #fde8f0;
+      --pink-pale:    #fff5f9;
+      --gold:         #f9c86a;
+      --white-glass:  rgba(255,255,255,0.55);
+      --blur:         18px;
+      --radius:       28px;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background: linear-gradient(140deg, #fce4ec 0%, #fff0f5 35%, #ffeaf2 60%, #fff9fb 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* ============================================================
+       AMBIENT GLOW ORBS
+    ============================================================ */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.35;
+      pointer-events: none;
+      z-index: 0;
+      animation: orbDrift 14s ease-in-out infinite alternate;
+    }
+    .orb-1 { width: 420px; height: 420px; background: radial-gradient(circle, #f9b8d4, transparent); top: -120px; left: -100px; animation-delay: 0s; }
+    .orb-2 { width: 360px; height: 360px; background: radial-gradient(circle, #fadadd, transparent); bottom: -80px; right: -80px; animation-delay: -5s; }
+    .orb-3 { width: 260px; height: 260px; background: radial-gradient(circle, #f7c5d8, transparent); top: 40%; left: 60%; animation-delay: -9s; }
+
+    @keyframes orbDrift {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(40px, 30px) scale(1.15); }
+    }
+
+    /* ============================================================
+       PARTICLE CANVAS
+    ============================================================ */
+    #particleCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ============================================================
+       MAIN STAGE
+    ============================================================ */
+    .stage {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    /* ============================================================
+       TITLE
+    ============================================================ */
+    .title {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2.4rem, 7vw, 4.8rem);
+      color: var(--pink-deep);
+      text-shadow: 0 2px 18px rgba(224,92,138,0.28), 0 0 40px rgba(244,160,191,0.25);
+      animation: titleFloat 3.5s ease-in-out infinite;
+      line-height: 1.15;
+    }
+
+    @keyframes titleFloat {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-7px); }
+    }
+
+    /* ============================================================
+       CAKE WRAPPER
+    ============================================================ */
+    .cake-wrapper {
+      position: relative;
+      cursor: pointer;
+      user-select: none;
+      animation: cakeFloat 3.2s ease-in-out infinite;
+      transition: transform 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .cake-wrapper:active { transform: scale(1.07); }
+
+    @keyframes cakeFloat {
+      0%,100% { transform: translateY(0px); }
+      50%      { transform: translateY(-14px); }
+    }
+
+    /* glow shadow beneath cake */
+    .cake-glow {
+      position: absolute;
+      bottom: -18px; left: 50%;
+      transform: translateX(-50%);
+      width: 160px; height: 28px;
+      background: radial-gradient(ellipse, rgba(244,160,191,0.55) 0%, transparent 75%);
+      filter: blur(6px);
+      animation: glowPulse 3.2s ease-in-out infinite;
+    }
+
+    @keyframes glowPulse {
+      0%,100% { opacity: 0.55; width: 160px; }
+      50%      { opacity: 0.8;  width: 120px; }
+    }
+
+    /* ============================================================
+       CAKE SVG — flat illustration style
+    ============================================================ */
+    .cake-svg { display: block; overflow: visible; }
+
+    /* Candle flame animation */
+    #flame-main {
+      transform-origin: 50% 100%;
+      animation: flameDance 0.9s ease-in-out infinite alternate;
+    }
+    #flame-glow {
+      transform-origin: 50% 100%;
+      animation: flameDance 1.1s ease-in-out infinite alternate-reverse;
+      opacity: 0.45;
+    }
+
+    @keyframes flameDance {
+      0%   { transform: scaleX(1) skewX(0deg); opacity: 1; }
+      40%  { transform: scaleX(0.85) skewX(4deg); opacity: 0.9; }
+      100% { transform: scaleX(1.12) skewX(-5deg); opacity: 0.85; }
+    }
+
+    /* Flame brighter on click */
+    .cake-wrapper.lit #flame-main { filter: drop-shadow(0 0 8px #fff176) drop-shadow(0 0 18px #ffd740); opacity: 1 !important; }
+    .cake-wrapper.lit #flame-glow { opacity: 0.85 !important; filter: drop-shadow(0 0 14px rgba(255,215,64,0.9)); }
+
+    /* ============================================================
+       HINT TEXT
+    ============================================================ */
+    .hint {
+      font-size: clamp(1rem, 3.5vw, 1.5rem);
+      color: var(--pink-mid);
+      letter-spacing: 0.04em;
+      font-style: italic;
+      animation: fadeInHint 1.8s ease 0.8s both;
+    }
+
+    @keyframes fadeInHint {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================================
+       POPUP OVERLAY
+    ============================================================ */
+    #popupOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(255,230,240,0.35);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.55s ease;
+    }
+
+    #popupOverlay.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ============================================================
+       POPUP CARD
+    ============================================================ */
+    .popup-card {
+      background: var(--white-glass);
+      backdrop-filter: blur(var(--blur));
+      -webkit-backdrop-filter: blur(var(--blur));
+      border: 1.5px solid rgba(244,160,191,0.55);
+      border-radius: var(--radius);
+      padding: clamp(28px, 6vw, 52px) clamp(22px, 7vw, 60px);
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+      box-shadow:
+        0 8px 48px rgba(224,92,138,0.18),
+        0 2px 14px rgba(244,160,191,0.22),
+        inset 0 1px 0 rgba(255,255,255,0.75);
+      position: relative;
+      overflow: hidden;
+      transform: scale(0.82) translateY(30px);
+      transition: transform 0.55s cubic-bezier(0.34,1.56,0.64,1), opacity 0.55s ease;
+      opacity: 0;
+    }
+
+    #popupOverlay.show .popup-card {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+
+    /* Glowing border pulse */
+    .popup-card::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: calc(var(--radius) + 2px);
+      background: linear-gradient(135deg, #f9b8d4, #fce4ec, #f4a0bf, #fadadd);
+      background-size: 300% 300%;
+      animation: borderGlow 4s ease infinite;
+      z-index: -1;
+      opacity: 0.6;
+    }
+
+    @keyframes borderGlow {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .popup-emoji {
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      display: block;
+      margin-bottom: 12px;
+      animation: emojiPop 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.4s both;
+    }
+
+    @keyframes emojiPop {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    .popup-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2rem, 6vw, 3.4rem);
+      color: var(--pink-deep);
+      text-shadow: 0 2px 12px rgba(224,92,138,0.25);
+      margin-bottom: 16px;
+      min-height: 1.3em;
+    }
+
+    .popup-arabic {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.15rem, 3.8vw, 1.75rem);
+      color: #c2587e;
+      direction: rtl;
+      line-height: 1.7;
+      font-style: italic;
+      min-height: 1.5em;
+    }
+
+    /* Typing cursor */
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      background: var(--pink-deep);
+      animation: blink 0.75s step-end infinite;
+      margin-left: 1px;
+      vertical-align: baseline;
+      height: 1em;
+    }
+
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0; }
+    }
+
+    /* ============================================================
+       CLOSE BUTTON
+    ============================================================ */
+    .close-btn {
+      display: inline-block;
+      margin-top: 28px;
+      padding: 12px 38px;
+      background: linear-gradient(135deg, var(--pink-deep), #f07faa);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      box-shadow: 0 4px 22px rgba(224,92,138,0.38);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      animation: btnFadeIn 0.5s ease 1.6s both;
+    }
+
+    @keyframes btnFadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .close-btn:hover  { transform: translateY(-2px) scale(1.04); box-shadow: 0 8px 30px rgba(224,92,138,0.48); }
+    .close-btn:active { transform: scale(0.97); }
+
+    /* ============================================================
+       POPUP SPARKLES
+    ============================================================ */
+    .sparkle-wrap {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      border-radius: var(--radius);
+    }
+
+    .sp {
+      position: absolute;
+      font-size: 0.85rem;
+      opacity: 0;
+      animation: spFloat 4s ease-in-out infinite;
+    }
+
+    @keyframes spFloat {
+      0%   { opacity: 0; transform: translateY(0) scale(0.5); }
+      20%  { opacity: 0.9; }
+      80%  { opacity: 0.8; }
+      100% { opacity: 0; transform: translateY(-60px) scale(1.2); }
+    }
+
+    /* ============================================================
+       CONFETTI CANVAS
+    ============================================================ */
+    #confettiCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    /* ============================================================
+       FLOATING HEARTS
+    ============================================================ */
+    .heart-particle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 49;
+      font-size: 1.4rem;
+      animation: heartRise 2.4s ease-out forwards;
+    }
+
+    @keyframes heartRise {
+      0%   { opacity: 1; transform: translateY(0) scale(0.5) rotate(0deg); }
+      60%  { opacity: 0.9; }
+      100% { opacity: 0; transform: translateY(-200px) scale(1.4) rotate(25deg); }
+    }
+
+    /* ============================================================
+       FIREWORK CANVAS
+    ============================================================ */
+    #fireworkCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 480px) {
+      .popup-card { padding: 28px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- Canvases -->
+  <canvas id="particleCanvas"></canvas>
+  <canvas id="fireworkCanvas"></canvas>
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- ===================== MAIN STAGE ===================== -->
+  <div class="stage">
+    <h1 class="title">Happy Birthday Belkis ❤️</h1>
+
+    <!-- CAKE -->
+    <div class="cake-wrapper" id="cake" title="Tap me!">
+      <!-- Glow -->
+      <div class="cake-glow"></div>
+
+      <!-- Flat illustration cake SVG -->
+      <svg class="cake-svg" width="220" height="240" viewBox="0 0 220 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+        <!-- Candle -->
+        <rect x="101" y="48" width="18" height="46" rx="4" fill="#fadadd" stroke="#f4a0bf" stroke-width="1.5"/>
+        <!-- Candle stripe -->
+        <rect x="101" y="56" width="18" height="5" rx="1" fill="#f4a0bf" opacity="0.55"/>
+        <rect x="101" y="68" width="18" height="5" rx="1" fill="#f4a0bf" opacity="0.55"/>
+        <rect x="101" y="80" width="18" height="5" rx="1" fill="#f4a0bf" opacity="0.55"/>
+        <!-- Wick -->
+        <line x1="110" y1="48" x2="110" y2="42" stroke="#bbb" stroke-width="1.8" stroke-linecap="round"/>
+
+        <!-- Flame glow (outer) -->
+        <ellipse id="flame-glow" cx="110" cy="32" rx="12" ry="16" fill="#ffe082" opacity="0.45"/>
+        <!-- Flame main -->
+        <path id="flame-main"
+          d="M110 20 C105 26 102 30 103 35 C104 40 108 43 110 43 C112 43 116 40 117 35 C118 30 115 26 110 20Z"
+          fill="url(#flameGrad)"/>
+        <!-- Flame inner highlight -->
+        <path d="M110 26 C108 30 107 33 108 36 C109 38 110 39 110 39 C110 39 111 38 112 36 C113 33 112 30 110 26Z"
+          fill="white" opacity="0.5"/>
+
+        <defs>
+          <linearGradient id="flameGrad" x1="110" y1="20" x2="110" y2="43" gradientUnits="userSpaceOnUse">
+            <stop offset="0%"   stop-color="#fff9c4"/>
+            <stop offset="40%"  stop-color="#ffd740"/>
+            <stop offset="100%" stop-color="#ff6f00"/>
+          </linearGradient>
+          <!-- Cake body gradient -->
+          <linearGradient id="cakeGrad1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="#fce4ec"/>
+            <stop offset="100%" stop-color="#f8bbd0"/>
+          </linearGradient>
+          <linearGradient id="cakeGrad2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="#f48fb1"/>
+            <stop offset="100%" stop-color="#e91e8c" stop-opacity="0.85"/>
+          </linearGradient>
+          <linearGradient id="frostingGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#fff"/>
+            <stop offset="100%" stop-color="#fce4ec"/>
+          </linearGradient>
+        </defs>
+
+        <!-- === CAKE BODY === -->
+
+        <!-- Top tier -->
+        <rect x="58" y="95" width="104" height="50" rx="6" fill="url(#cakeGrad1)" stroke="#f4a0bf" stroke-width="1.5"/>
+        <!-- Top tier frosting drip -->
+        <path d="M58 101 Q68 108 78 101 Q88 94 98 101 Q108 108 118 101 Q128 94 138 101 Q148 108 158 101 Q162 95 162 95 L58 95 Z"
+          fill="url(#frostingGrad)" opacity="0.9"/>
+        <!-- Top tier decoration dots -->
+        <circle cx="82"  cy="120" r="4" fill="#f48fb1"/>
+        <circle cx="110" cy="120" r="4" fill="#e91e8c" opacity="0.7"/>
+        <circle cx="138" cy="120" r="4" fill="#f48fb1"/>
+        <!-- Top tier bottom edge -->
+        <rect x="58" y="141" width="104" height="4" rx="2" fill="#f4a0bf" opacity="0.5"/>
+
+        <!-- Bottom tier -->
+        <rect x="34" y="145" width="152" height="68" rx="8" fill="url(#cakeGrad2)" stroke="#e91e8c" stroke-width="1.5" opacity="0.9"/>
+        <!-- Bottom tier frosting drip -->
+        <path d="M34 153 Q50 163 66 153 Q82 143 98 153 Q114 163 130 153 Q146 143 162 153 Q174 143 186 145 L34 145 Z"
+          fill="url(#frostingGrad)" opacity="0.85"/>
+        <!-- Bottom tier decorations — rosettes -->
+        <circle cx="68"  cy="180" r="7" fill="#fce4ec" opacity="0.65"/>
+        <circle cx="110" cy="180" r="7" fill="#fce4ec" opacity="0.65"/>
+        <circle cx="152" cy="180" r="7" fill="#fce4ec" opacity="0.65"/>
+        <!-- Center heart -->
+        <path d="M104 176 C104 173 108 170 110 173 C112 170 116 173 116 176 C116 180 110 185 110 185 C110 185 104 180 104 176Z"
+          fill="white" opacity="0.8"/>
+
+        <!-- Cake base plate -->
+        <ellipse cx="110" cy="213" rx="92" ry="10" fill="#f8bbd0" opacity="0.5"/>
+        <ellipse cx="110" cy="211" rx="88" ry="7"  fill="#fce4ec" opacity="0.8"/>
+
+        <!-- Sprinkles on top tier -->
+        <rect x="70"  y="106" width="8"  height="2.5" rx="1" fill="#e91e8c" opacity="0.5" transform="rotate(-30 70 106)"/>
+        <rect x="90"  y="110" width="8"  height="2.5" rx="1" fill="#ffd740" opacity="0.6" transform="rotate(20 90 110)"/>
+        <rect x="130" y="106" width="8"  height="2.5" rx="1" fill="#e91e8c" opacity="0.5" transform="rotate(10 130 106)"/>
+        <rect x="148" y="112" width="8"  height="2.5" rx="1" fill="#ffd740" opacity="0.6" transform="rotate(-20 148 112)"/>
+      </svg>
+    </div><!-- /cake-wrapper -->
+
+    <p class="hint">Tap the cake 🎂</p>
+  </div><!-- /stage -->
+
+
+  <!-- ===================== POPUP ===================== -->
+  <div id="popupOverlay">
+    <div class="popup-card" id="popupCard">
+      <!-- Mini sparkles -->
+      <div class="sparkle-wrap" id="sparkleWrap"></div>
+
+      <span class="popup-emoji">🎉</span>
+      <div class="popup-title" id="popupTitle"></div>
+      <div class="popup-arabic" id="popupArabic"></div>
+
+      <button class="close-btn" id="closeBtn">Close ❤️</button>
+    </div>
+  </div>
+
+
+  <!-- ===================== AUDIO: procedural chime ===================== -->
+  <!-- Music is generated via Web Audio API – no external files needed -->
+
+
+  <script>
+  /* ================================================================
+     GLOBALS
+  ================================================================ */
+  const cake       = document.getElementById('cake');
+  const overlay    = document.getElementById('popupOverlay');
+  const closeBtn   = document.getElementById('closeBtn');
+  const titleEl    = document.getElementById('popupTitle');
+  const arabicEl   = document.getElementById('popupArabic');
+  const sparkleW   = document.getElementById('sparkleWrap');
+  const confettiCv = document.getElementById('confettiCanvas');
+  const fireworkCv = document.getElementById('fireworkCanvas');
+  const particleCv = document.getElementById('particleCanvas');
+
+  const ctxC = confettiCv.getContext('2d');
+  const ctxF = fireworkCv.getContext('2d');
+  const ctxP = particleCv.getContext('2d');
+
+  let audioStarted = false;
+  let audioCtx;
+  let confettiActive = false;
+  let fireworksActive = false;
+  let confettiPieces = [];
+  let fireworks = [];
+  let particles = []; // ambient
+
+  /* ================================================================
+     RESIZE
+  ================================================================ */
+  function resize() {
+    [confettiCv, fireworkCv, particleCv].forEach(cv => {
+      cv.width  = window.innerWidth;
+      cv.height = window.innerHeight;
+    });
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+
+  /* ================================================================
+     AMBIENT PARTICLES
+  ================================================================ */
+  const PINK_PALETTE = ['#f9b8d4','#f4a0bf','#fadadd','#fce4ec','#f48fb1','#e05c8a'];
+
+  function spawnParticle() {
+    return {
+      x: Math.random() * window.innerWidth,
+      y: window.innerHeight + 10,
+      r: Math.random() * 3 + 1,
+      color: PINK_PALETTE[Math.floor(Math.random() * PINK_PALETTE.length)],
+      speed: Math.random() * 0.6 + 0.25,
+      drift: (Math.random() - 0.5) * 0.4,
+      alpha: Math.random() * 0.5 + 0.25,
+      life: 1
+    };
+  }
+
+  for (let i = 0; i < 55; i++) {
+    const p = spawnParticle();
+    p.y = Math.random() * window.innerHeight;
+    particles.push(p);
+  }
+
+  function drawParticles() {
+    ctxP.clearRect(0, 0, particleCv.width, particleCv.height);
+    particles.forEach((p, i) => {
+      p.y    -= p.speed;
+      p.x    += p.drift;
+      ctxP.globalAlpha = p.alpha;
+      ctxP.beginPath();
+      ctxP.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctxP.fillStyle = p.color;
+      ctxP.fill();
+      if (p.y < -10) particles[i] = spawnParticle();
+    });
+    ctxP.globalAlpha = 1;
+  }
+
+
+  /* ================================================================
+     CONFETTI
+  ================================================================ */
+  const CONFETTI_COLORS = ['#e05c8a','#f9b8d4','#ffd740','#f4a0bf','#ff80ab','#ce93d8','#fff9c4','#f48fb1'];
+
+  function launchConfetti() {
+    confettiActive = true;
+    const count = 220;
+    for (let i = 0; i < count; i++) {
+      confettiPieces.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight * 0.5 - 30,
+        w: Math.random() * 10 + 5,
+        h: Math.random() * 6 + 3,
+        color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
+        vy: Math.random() * 3.5 + 1.5,
+        vx: (Math.random() - 0.5) * 2.8,
+        angle: Math.random() * Math.PI * 2,
+        spin: (Math.random() - 0.5) * 0.18,
+        alpha: 1
+      });
+    }
+    setTimeout(() => { confettiActive = false; }, 6000);
+  }
+
+  function drawConfetti() {
+    ctxC.clearRect(0, 0, confettiCv.width, confettiCv.height);
+    if (!confettiPieces.length) return;
+    confettiPieces.forEach((p, i) => {
+      p.y     += p.vy;
+      p.x     += p.vx;
+      p.angle += p.spin;
+      p.vy    += 0.05; // gravity
+      if (p.y > confettiCv.height + 20) p.alpha -= 0.05;
+      ctxC.save();
+      ctxC.globalAlpha = Math.max(0, p.alpha);
+      ctxC.translate(p.x, p.y);
+      ctxC.rotate(p.angle);
+      ctxC.fillStyle = p.color;
+      ctxC.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctxC.restore();
+    });
+    confettiPieces = confettiPieces.filter(p => p.alpha > 0);
+  }
+
+
+  /* ================================================================
+     FIREWORKS
+  ================================================================ */
+  class Firework {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      this.x    = Math.random() * window.innerWidth;
+      this.y    = Math.random() * (window.innerHeight * 0.55);
+      this.particles = [];
+      const count = Math.floor(Math.random() * 30 + 30);
+      const hue   = Math.floor(Math.random() * 360);
+      for (let i = 0; i < count; i++) {
+        const angle = (Math.PI * 2 / count) * i;
+        const speed = Math.random() * 4.5 + 1.5;
+        this.particles.push({
+          x: this.x, y: this.y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          alpha: 1,
+          color: `hsl(${hue + Math.random() * 40 - 20}, 100%, 72%)`
+        });
+      }
+      this.alive = true;
+    }
+    update() {
+      this.particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.07;
+        p.alpha -= 0.022;
+      });
+      if (this.particles.every(p => p.alpha <= 0)) this.alive = false;
+    }
+    draw(ctx) {
+      this.particles.forEach(p => {
+        if (p.alpha <= 0) return;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.alpha);
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2.4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+    }
+  }
+
+  function launchFireworks() {
+    fireworksActive = true;
+    let launched = 0;
+    const interval = setInterval(() => {
+      fireworks.push(new Firework());
+      launched++;
+      if (launched >= 18) {
+        clearInterval(interval);
+        setTimeout(() => { fireworksActive = false; }, 4000);
+      }
+    }, 250);
+  }
+
+  function drawFireworks() {
+    ctxF.clearRect(0, 0, fireworkCv.width, fireworkCv.height);
+    fireworks.forEach(fw => { fw.update(); fw.draw(ctxF); });
+    fireworks = fireworks.filter(fw => fw.alive);
+  }
+
+
+  /* ================================================================
+     FLOATING HEARTS
+  ================================================================ */
+  function spawnHearts() {
+    const emojis = ['❤️','💕','💖','💗','💝','🌸','✨','💞'];
+    for (let i = 0; i < 20; i++) {
+      setTimeout(() => {
+        const el = document.createElement('div');
+        el.className = 'heart-particle';
+        el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.top  = (30 + Math.random() * 60) + 'vh';
+        el.style.fontSize = (1 + Math.random() * 1.4) + 'rem';
+        el.style.animationDuration = (1.8 + Math.random()) + 's';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 3500);
+      }, i * 80);
+    }
+  }
+
+
+  /* ================================================================
+     POPUP SPARKLES
+  ================================================================ */
+  function buildPopupSparkles() {
+    sparkleW.innerHTML = '';
+    const symbols = ['✨','⭐','🌟','💫','✦','✧'];
+    for (let i = 0; i < 14; i++) {
+      const s = document.createElement('span');
+      s.className = 'sp';
+      s.textContent = symbols[i % symbols.length];
+      s.style.left   = Math.random() * 90 + '%';
+      s.style.top    = Math.random() * 90 + '%';
+      s.style.animationDelay    = (Math.random() * 3) + 's';
+      s.style.animationDuration = (3 + Math.random() * 2) + 's';
+      sparkleW.appendChild(s);
+    }
+  }
+
+
+  /* ================================================================
+     WEB AUDIO — Birthday Music (procedural arpeggios & melody)
+  ================================================================ */
+  function startMusic() {
+    if (audioStarted) return;
+    audioStarted = true;
+
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    const master = audioCtx.createGain();
+    master.gain.setValueAtTime(0.0, audioCtx.currentTime);
+    master.gain.linearRampToValueAtTime(0.32, audioCtx.currentTime + 1.2);
+    master.connect(audioCtx.destination);
+
+    /* ---- Happy Birthday melody (C major) ---- */
+    const notes = {
+      C4:261.63, D4:293.66, E4:329.63, F4:349.23,
+      G4:392.00, A4:440.00, B4:493.88,
+      C5:523.25, D5:587.33, E5:659.25, F5:698.46,
+      G5:783.99, A5:880.00
+    };
+
+    // Happy Birthday melody sequence: [note, duration_beats]
+    const melody = [
+      ['G4',0.75],['G4',0.25],['A4',1],['G4',1],['C5',1],['B4',2],
+      ['G4',0.75],['G4',0.25],['A4',1],['G4',1],['D5',1],['C5',2],
+      ['G4',0.75],['G4',0.25],['G5',1],['E5',1],['C5',1],['B4',1],['A4',2],
+      ['F5',0.75],['F5',0.25],['E5',1],['C5',1],['D5',1],['C5',2]
+    ];
+
+    const bpm  = 76;
+    const beat = 60 / bpm;
+    let   t    = audioCtx.currentTime + 0.5;
+
+    function playNote(freq, start, dur, vol = 0.28, type = 'sine') {
+      const osc  = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, start);
+      gain.gain.setValueAtTime(0, start);
+      gain.gain.linearRampToValueAtTime(vol, start + 0.04);
+      gain.gain.setValueAtTime(vol, start + dur * 0.7);
+      gain.gain.linearRampToValueAtTime(0, start + dur * 0.95);
+      osc.connect(gain);
+      gain.connect(master);
+      osc.start(start);
+      osc.stop(start + dur + 0.05);
+    }
+
+    // Play melody twice, with looping
+    function playMelody(offset) {
+      let localT = offset;
+      melody.forEach(([name, beats]) => {
+        const dur = beats * beat;
+        playNote(notes[name], localT, dur, 0.22, 'triangle');
+        // Soft harmony a third below
+        const harmMap = {G4:'E4',A4:'F4',B4:'G4',C5:'A4',D5:'B4',E5:'C5',F5:'D5',G5:'E5'};
+        const harmName = harmMap[name];
+        const harmFreqs = {E4:329.63,F4:349.23,G4:392.00,A4:440.00,B4:493.88,C5:523.25,D5:587.33,E5:659.25};
+        if (harmName && harmFreqs[harmName]) playNote(harmFreqs[harmName], localT, dur, 0.09, 'sine');
+        localT += dur;
+      });
+      return localT;
+    }
+
+    // Arpeggio chords underneath
+    const chordNotes = [
+      [notes.C4, notes.E4, notes.G4],
+      [notes.G4, notes.B4, notes.D5],
+      [notes.F4, notes.A4, notes.C5],
+      [notes.G4, notes.B4, notes.D5]
+    ];
+
+    function playArp(startT) {
+      let at = startT;
+      for (let rep = 0; rep < 16; rep++) {
+        const chord = chordNotes[rep % chordNotes.length];
+        chord.forEach((f, i) => {
+          playNote(f, at + i * beat * 0.25, beat * 0.22, 0.06, 'sine');
+        });
+        at += beat;
+      }
+      return at;
+    }
+
+    // Layer everything
+    let end1 = playMelody(t);
+    playArp(t);
+    // Second pass
+    let end2 = playMelody(end1);
+    playArp(end1);
+
+    // Gentle fade out after ~30s
+    master.gain.setValueAtTime(0.32, end2 - 2);
+    master.gain.linearRampToValueAtTime(0, end2 + 1);
+  }
+
+
+  /* ================================================================
+     TYPING ANIMATION
+  ================================================================ */
+  function typeText(el, text, speed, onDone) {
+    el.innerHTML = '';
+    const cursor = document.createElement('span');
+    cursor.className = 'cursor';
+    el.appendChild(cursor);
+    let i = 0;
+    function step() {
+      if (i < text.length) {
+        el.insertBefore(document.createTextNode(text[i]), cursor);
+        i++;
+        setTimeout(step, speed);
+      } else {
+        cursor.remove();
+        if (onDone) onDone();
+      }
+    }
+    setTimeout(step, 200);
+  }
+
+
+  /* ================================================================
+     CAKE CLICK
+  ================================================================ */
+  cake.addEventListener('click', () => {
+    // Light flame
+    cake.classList.add('lit');
+
+    // Bounce animation
+    cake.style.animation = 'none';
+    cake.style.transform = 'scale(1.12)';
+    setTimeout(() => {
+      cake.style.transform = '';
+      cake.style.animation = '';
+    }, 180);
+
+    // Effects
+    launchConfetti();
+    launchFireworks();
+    spawnHearts();
+    startMusic();
+    openPopup();
+  });
+
+
+  /* ================================================================
+     OPEN POPUP
+  ================================================================ */
+  function openPopup() {
+    buildPopupSparkles();
+    overlay.classList.add('show');
+    document.body.style.overflow = 'hidden';
+
+    // Type title
+    titleEl.innerHTML = '';
+    arabicEl.innerHTML = '';
+
+    typeText(titleEl, 'Happy Birthday Belkis 🎉', 55, () => {
+      // Then type Arabic
+      setTimeout(() => {
+        typeText(arabicEl, 'كل عام و نتي بخير يا لعزيزة ❤️', 60, null);
+      }, 300);
+    });
+  }
+
+
+  /* ================================================================
+     CLOSE POPUP
+  ================================================================ */
+  closeBtn.addEventListener('click', () => {
+    overlay.classList.remove('show');
+    document.body.style.overflow = '';
+  });
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      overlay.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+  });
+
+
+  /* ================================================================
+     MAIN ANIMATION LOOP
+  ================================================================ */
+  function loop() {
+    drawParticles();
+    drawConfetti();
+    drawFireworks();
+    requestAnimationFrame(loop);
+  }
+  loop();
+
+  </script>
+</body>
+</html>
